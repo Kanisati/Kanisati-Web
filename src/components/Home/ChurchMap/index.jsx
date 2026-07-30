@@ -32,15 +32,28 @@ export default function ChurchMap() {
     ]
 
     useEffect(() => {
+
+        if (!navigator.geolocation) {
+            console.log("Geolocation not supported");
+            return;
+        }
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
+
                 setUserPosition([
                     position.coords.latitude,
                     position.coords.longitude
                 ]);
+
             },
             (error) => {
-                console.log(error);
+                console.log(error.code, error.message);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
             }
         );
 
