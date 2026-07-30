@@ -7,7 +7,7 @@ import {
     Marker,
     Popup,
 } from 'react-leaflet';
-import { Box, Button } from '@mantine/core';
+import { Box } from '@mantine/core';
 
 export default function ChurchMap() {
     const [userPosition, setUserPosition] = useState(null);
@@ -58,33 +58,10 @@ export default function ChurchMap() {
         );
 
     }, []);
-    const getLocation = () => {
 
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-
-                setUserPosition([
-                    position.coords.latitude,
-                    position.coords.longitude
-                ]);
-
-            },
-            (error) => {
-                console.log(error);
-            }
-        );
-
-    };
     if (!userPosition) {
-        return <>
-            <p>Loading location...</p>
-            <Button onClick={getLocation}>
-                📍 Find churches near me
-            </Button>
-        </>
+        return <p>Loading location...</p>;
     }
-
-
 
     return (
         <Box>
