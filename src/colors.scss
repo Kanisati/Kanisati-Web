@@ -1,0 +1,48 @@
+// Neutral scale (light -> dark)
+$neutral-0: var(--mantine-color-black-0);
+$neutral-1: var(--mantine-color-black-1);
+$neutral-2: var(--mantine-color-black-2);
+$neutral-3: var(--mantine-color-black-3);
+$neutral-4: var(--mantine-color-black-4);
+$neutral-5: var(--mantine-color-black-5);
+$neutral-6: var(--mantine-color-black-6);
+$neutral-7: var(--mantine-color-black-7);
+$neutral-8: var(--mantine-color-black-8);
+$neutral-9: var(--mantine-color-black-9);
+
+// Brand / accent colors
+$orange-2: var(--mantine-color-orange-2);
+$orange-6: var(--mantine-color-orange-6);
+$red-4: var(--mantine-color-red-4);
+$red-6: var(--mantine-color-red-6);
+$red-7: var(--mantine-color-red-7);
+$red-8: var(--mantine-color-red-8);
+$green-0: var(--mantine-color-green-0);
+$green-6: var(--mantine-color-green-6);
+$purple-6: var(--mantine-color-purple-6);
+
+// Common semantic tokens
+$white: #ffffff;
+$background: #f4f8fb;
+$text-primary: $neutral-9;
+$text-secondary: $neutral-7;
+$border-color: $neutral-3;
+
+// Legacy aliases (keep for compatibility)
+$light-gray-0: $neutral-0;
+$light-gray-1: $neutral-1;
+$light-gray-2: $neutral-2;
+$light-gray-3: $neutral-3;
+$gray: $neutral-4;
+$black-5: $neutral-5;
+$black-4: $neutral-6;
+$black-3: $neutral-7;
+$black-2: $neutral-8;
+$black: $neutral-9;
+$orange: $orange-6;
+$orange-1: $orange-2;
+$red: $red-6;
+$red-2: $red-4;
+$primary-red: $red-8;
+$green: $green-6;
+$purple: $purple-6;
