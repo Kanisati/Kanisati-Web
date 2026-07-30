@@ -75,7 +75,7 @@ export default function ChurchMap() {
             >
                 <TileLayer
                     attribution='© OpenStreetMap contributors'
-                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    url="https://tile.openstreetmap.de/{z}/{x}/{y}.png"
                 />
 
                 {churches.map((church) => (
