@@ -31,7 +31,7 @@ export default function ChurchMap() {
         }
     ]
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 setUserPosition([
