@@ -1,103 +1,43 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { useDiscovery } from '../../../contexts/DiscoveryContext';
+import { BEIRUT, coordinatesOf } from '../../../utils/coordinates';
+import { Button } from '../../ui';
 import styles from './styles.module.scss';
 
-import {
-    MapContainer,
-    TileLayer,
-    Marker,
-    Popup,
-} from 'react-leaflet';
-import { Box } from '@mantine/core';
+function MapViewport({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => { map.flyTo(center, zoom); }, [center, map, zoom]);
+  useEffect(() => {
+    const observer = new ResizeObserver(() => map.invalidateSize());
+    observer.observe(map.getContainer());
+    return () => observer.disconnect();
+  }, [map]);
+  return null;
+}
 
 export default function ChurchMap() {
-    const [userPosition, setUserPosition] = useState(null);
-
-    const churches = [
-        {
-            "id": 1,
-            "name": "St. George Church",
-            "latitude": 33.8938,
-            "longitude": 35.5018,
-            "city": "Beirut",
-            "address": "Achrafieh"
-        },
-        {
-            "id": 2,
-            "name": "Saint Elias Church",
-            "latitude": 33.9045,
-            "longitude": 35.6124,
-            "city": "Baabda",
-            "address": "Main Road"
-        }
-    ]
-
-    useEffect(() => {
-
-        if (!navigator.geolocation) {
-            console.log("Geolocation not supported");
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-
-                setUserPosition([
-                    position.coords.latitude,
-                    position.coords.longitude
-                ]);
-
-            },
-            (error) => {
-                console.log(error.code, error.message);
-            },
-            {
-                enableHighAccuracy: true,
-                timeout: 10000,
-                maximumAge: 0
-            }
-        );
-
-    }, []);
-
-    if (!userPosition) {
-        return <p>Loading location...</p>;
-    }
-
-    return (
-        <Box>
-            <MapContainer
-                center={userPosition}
-                zoom={17}
-                style={{
-                    width: '100%',
-                    height: '92vh',
-                }}
-            >
-                <TileLayer
-                    attribution='© OpenStreetMap contributors'
-                    url="https://tile.openstreetmap.de/{z}/{x}/{y}.png"
-                />
-
-                {churches.map((church) => (
-                    <Marker
-                        key={church.id}
-                        position={[church.latitude, church.longitude]}
-                    >
-                        <Popup>
-                            <h3>{church.name}</h3>
-
-                            <p>{church.city}</p>
-
-                            <p>{church.address}</p>
-                        </Popup>
-                    </Marker>
-                ))}
-                <Marker position={userPosition}>
-                    <Popup>
-                        You are here
-                    </Popup>
-                </Marker>
-            </MapContainer>
-        </Box>
-    );
+  const { churches, position, center, zoom, selectChurch } = useDiscovery();
+  return (
+    <div className={styles.mapFrame}>
+      <MapContainer center={BEIRUT} zoom={12} className={styles.map}>
+        <MapViewport center={center} zoom={zoom} />
+        <TileLayer attribution="© OpenStreetMap contributors" url="https://tile.openstreetmap.de/{z}/{x}/{y}.png" />
+        {churches.map((church) => {
+          const coordinates = coordinatesOf(church);
+          return coordinates && (
+            <Marker key={church.id} position={coordinates}>
+              <Popup>
+                <h3>{church.name}</h3>
+                <p>{[church.city, church.formattedAddress].filter(Boolean).join(' · ')}</p>
+                {Number.isFinite(church.distanceKm) && <p>{church.distanceKm.toFixed(1)} km away</p>}
+                <Button size="xs" onClick={() => selectChurch(church)}>View church details</Button>
+              </Popup>
+            </Marker>
+          );
+        })}
+        {position && <Marker position={position}><Popup>You are here</Popup></Marker>}
+      </MapContainer>
+    </div>
+  );
 }

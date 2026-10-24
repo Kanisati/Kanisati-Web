@@ -1,0 +1,24 @@
+.results {
+  overflow-y: auto;
+  max-height: 65vh;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.resultRow { display: flex; align-items: center; gap: 0.5rem; }
+
+.resultButton {
+  flex: 1;
+  min-width: 0;
+  padding: 0.75rem;
+  border: 1px solid var(--mantine-color-default-border);
+  border-radius: var(--mantine-radius-md);
+  background: var(--mantine-color-body);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.resultButton:hover { border-color: var(--mantine-primary-color-filled); }
+.resultButton:focus-visible { outline: 2px solid var(--mantine-primary-color-filled); outline-offset: 2px; }

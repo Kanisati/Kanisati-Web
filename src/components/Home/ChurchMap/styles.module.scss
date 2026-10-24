@@ -1,0 +1,11 @@
+.mapFrame {
+  overflow: hidden;
+  border-radius: 0.75rem;
+  isolation: isolate;
+}
+
+.map {
+  width: 100%;
+  height: 65vh;
+  min-height: 22rem;
+}

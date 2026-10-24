@@ -1,0 +1,48 @@
+import { useReducer, useState } from 'react';
+import { Group, Text } from '@mantine/core';
+import { useAuth } from '../contexts/AuthContext';
+import { Button, Dialog, Feedback } from '../components/ui';
+import AuthForm from './AuthForm';
+import AccountProvider from '../contexts/AccountProvider';
+import AccountDetails from '../components/account/AccountDetails';
+
+export default function AuthControl() {
+  const auth = useAuth();
+  const [accountOpened, setAccountOpened] = useState(false);
+  const [dialog, setDialog] = useState({ opened: false, mode: 'login' });
+  const [logout, setLogout] = useReducer((state, action) => ({ ...state, ...action }), { busy: false, error: null });
+  const close = () => setDialog((current) => ({ ...current, opened: false }));
+
+  const handleSignOut = async () => {
+    if (logout.busy) return;
+    setAccountOpened(false);
+    setLogout({ busy: true, error: null });
+    try {
+      await auth.signOut();
+      setLogout({ busy: false });
+    } catch (error) {
+      setLogout({ busy: false, error });
+    }
+  };
+
+  return (
+    <>
+      {auth.isSignedIn ? (
+        <Group gap="xs">
+          <Text size="sm" visibleFrom="sm">{auth.account?.email || auth.account?.firstName || 'Signed in'}</Text>
+          <Button variant="default" onClick={() => setAccountOpened(true)}>My account</Button>
+          <Button variant="default" onClick={handleSignOut} loading={logout.busy}>Sign out</Button>
+        </Group>
+      ) : <Button variant="default" onClick={() => setDialog({ opened: true, mode: 'login' })}>Sign in</Button>}
+      <Feedback message={logout.error} tone="warning" />
+      {auth.isSignedIn && (
+        <Dialog opened={accountOpened} onClose={() => setAccountOpened(false)} title="My account">
+          {accountOpened && <AccountProvider key={auth.accountKey}><AccountDetails /></AccountProvider>}
+        </Dialog>
+      )}
+      <Dialog opened={dialog.opened} onClose={close} title={dialog.mode === 'login' ? 'Sign in' : 'Create a user account'}>
+        {dialog.opened && <AuthForm key={dialog.mode} mode={dialog.mode} onSuccess={close} onModeChange={(mode) => setDialog({ opened: true, mode })} />}
+      </Dialog>
+    </>
+  );
+}
