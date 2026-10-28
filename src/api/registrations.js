@@ -1,5 +1,9 @@
 import { authenticatedApiRequest } from './auth';
 
+export async function cancelEventRegistration(eventId) {
+  await authenticatedApiRequest(`/events/${encodeURIComponent(eventId)}/registrations`, { method: 'DELETE' });
+}
+
 export async function registerForEvent(eventId) {
   await authenticatedApiRequest(`/events/${encodeURIComponent(eventId)}/registrations`, { method: 'POST' });
 }

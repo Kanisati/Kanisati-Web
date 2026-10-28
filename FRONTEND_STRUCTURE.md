@@ -59,7 +59,7 @@ Public GET requests still use the shared client's in-flight deduplication. Prote
 
 ## Checks
 
-The My registrations tab is available to user accounts. It mounts `RegistrationsProvider` on demand and loads `/events/registrations/mine`, with upcoming/all filters, pagination, and refresh. Event dates use the church timezone when provided. Signed-in users can register from event details using POST /events/:eventId/registrations. Successful registration refreshes events and capacity; API conflicts are displayed without assuming every conflict means a duplicate. Cancellation is reserved for a later step.
+The My registrations tab is available to user accounts. It mounts `RegistrationsProvider` on demand and loads `/events/registrations/mine`, with upcoming/all filters, pagination, and refresh. Event dates use the church timezone when provided. Signed-in users can register from event details using POST /events/:eventId/registrations. Successful registration refreshes events and capacity; API conflicts are displayed without assuming every conflict means a duplicate. My registrations supports cancellation before the event starts through DELETE /events/:eventId/registrations. An inline confirmation precedes the request, errors remain visible, and success refreshes the registration list from page one.
 
 The Notifications tab mounts `NotificationsProvider` on demand. It loads `GET /accounts/me/notifications` with pagination, displays `meta.unreadCount`, and supports refresh/retry. Viewing notifications does not mark them read. Explicit actions mark one/all as read or delete a notification after confirmation. Mutations show feedback and refresh the list from page one with the latest unread count.
 
