@@ -1,6 +1,5 @@
 import { Group, Stack, Text } from '@mantine/core';
 import { useFavorites } from '../../contexts/FavoritesContext';
-import { formatDate } from '../../utils/formatDate';
 import { Feedback } from '../ui';
 import FavoriteButton from './FavoriteButton';
 
@@ -27,12 +26,6 @@ export default function ChurchProfile({ church }) {
         <section>
           <Text fw={600} mb={4}>Opening hours</Text>
           <Stack gap={2}>{church.openingHours.map((hours) => <Text size="sm" key={hours.id || hours.dayOfWeek}>{hours.dayOfWeek}: {hours.isClosed ? 'Closed' : `${hours.opensAt}–${hours.closesAt}`}</Text>)}</Stack>
-        </section>
-      )}
-      {items(church.events).length > 0 && (
-        <section>
-          <Text fw={600} mb={4}>Upcoming events</Text>
-          <Stack gap={2}>{church.events.map((event) => <Text size="sm" key={event.id}>{event.title} · {formatDate(event.startAt, church.timezone)}</Text>)}</Stack>
         </section>
       )}
     </Stack>

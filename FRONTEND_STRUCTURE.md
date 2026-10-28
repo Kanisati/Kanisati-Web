@@ -59,6 +59,8 @@ Public GET requests still use the shared client's in-flight deduplication. Prote
 
 ## Checks
 
+Church details load paginated upcoming events through `ChurchEventsProvider` and `/events/churches/:churchId`, replacing the embedded event list. View event closes church details and opens the existing event modal, where registration is available.
+
 Church details load recurring Mass schedules through `ChurchSchedulesProvider` and `/mass-schedules/churches/:churchId`. The section includes pagination, retry, empty states, and the church timezone. It replaces the embedded schedule list; dated occurrences remain in the Home Mass search.
 
 Saved churches is a user-only account tab with paginated favorites and removal. Favorite mutations notify the Home favorites provider to reload saved IDs. The profile photo feature was removed at the user's request.

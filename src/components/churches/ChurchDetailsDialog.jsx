@@ -5,6 +5,8 @@ import ChurchProfile from './ChurchProfile';
 import ReviewsSection from './ReviewsSection';
 import ChurchSchedulesProvider from '../../contexts/ChurchSchedulesProvider';
 import ChurchSchedulesSection from './ChurchSchedulesSection';
+import ChurchEventsProvider from '../../contexts/ChurchEventsProvider';
+import ChurchEventsSection from './ChurchEventsSection';
 
 export default function ChurchDetailsDialog() {
   const { selectedChurchId, closeChurch, detail } = useDiscovery();
@@ -15,6 +17,11 @@ export default function ChurchDetailsDialog() {
       {detail.data && selectedChurchId && <ChurchSchedulesProvider key={selectedChurchId} churchId={selectedChurchId}>
         <ChurchSchedulesSection timezone={detail.data.timezone} />
       </ChurchSchedulesProvider>}
+      {selectedChurchId && (
+        <ChurchEventsProvider key={selectedChurchId} churchId={selectedChurchId}>
+          {detail.data && <ChurchEventsSection timezone={detail.data.timezone} />}
+        </ChurchEventsProvider>
+      )}
       {selectedChurchId && (
         <ReviewsProvider key={selectedChurchId} churchId={selectedChurchId}>
           {detail.data && <ReviewsSection />}
