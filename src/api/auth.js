@@ -38,6 +38,14 @@ export async function registerUser(details) {
   return response.data;
 }
 
+export async function registerChurch(details) {
+  const response = await apiRequest('/auth/register/church', {
+    method: 'POST',
+    body: JSON.stringify(details),
+  });
+  return response.data;
+}
+
 export async function signOut(refreshToken) {
   if (!refreshToken) return;
   await apiRequest('/auth/logout', {

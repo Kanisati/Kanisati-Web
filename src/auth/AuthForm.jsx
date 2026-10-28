@@ -28,6 +28,7 @@ export default function AuthForm({ mode, onSuccess, onModeChange }) {
         <Button variant="subtle" disabled={form.submitting} onClick={() => onModeChange(registering ? 'login' : 'register')}>
           {registering ? 'Already have an account? Sign in' : 'Create a user account'}
         </Button>
+        <Button variant="subtle" disabled={form.submitting} onClick={() => onModeChange('registerChurch')}>Register a church</Button>
       </Stack>
     </form>
   );

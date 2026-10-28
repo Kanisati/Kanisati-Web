@@ -3,6 +3,7 @@ import { Group, Text } from '@mantine/core';
 import { useAuth } from '../contexts/AuthContext';
 import { Button, Dialog, Feedback } from '../components/ui';
 import AuthForm from './AuthForm';
+import ChurchRegistrationForm from './ChurchRegistrationForm';
 import AccountProvider from '../contexts/AccountProvider';
 import AccountDetails from '../components/account/AccountDetails';
 
@@ -36,6 +37,7 @@ export default function AuthControl() {
         </Group>
       ) : <Button variant="default" onClick={() => { setAccountMessage(''); setDialog({ opened: true, mode: 'login' }); }}>Sign in</Button>}
       <Feedback message={accountMessage} tone="success" />
+      {auth.isSignedIn && (auth.session?.churchStatus ?? auth.account?.churchStatus) === 'PENDING' && <Feedback tone="warning" message="Your church is pending approval. Event publishing will be available after approval." />}
       <Feedback message={logout.error} tone="warning" />
       {auth.isSignedIn && (
         <Dialog opened={accountOpened} onClose={() => setAccountOpened(false)} title="My account" size="lg" padding="lg" radius="md">
@@ -48,8 +50,10 @@ export default function AuthControl() {
           }}><AccountDetails /></AccountProvider>}
         </Dialog>
       )}
-      <Dialog opened={dialog.opened} onClose={close} title={dialog.mode === 'login' ? 'Sign in' : 'Create a user account'}>
-        {dialog.opened && <AuthForm key={dialog.mode} mode={dialog.mode} onSuccess={close} onModeChange={(mode) => setDialog({ opened: true, mode })} />}
+      <Dialog opened={dialog.opened} onClose={close} title={dialog.mode === 'login' ? 'Sign in' : dialog.mode === 'registerChurch' ? 'Create a church account' : 'Create a user account'}>
+        {dialog.opened && (dialog.mode === 'registerChurch' ? (
+          <ChurchRegistrationForm onSuccess={(message) => { setAccountMessage(message); close(); }} onModeChange={(mode) => setDialog({ opened: true, mode })} />
+        ) : <AuthForm key={dialog.mode} mode={dialog.mode} onSuccess={close} onModeChange={(mode) => setDialog({ opened: true, mode })} />)}
       </Dialog>
     </>
   );

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { clearSession, readSession, registerUser, saveSession, signIn, signOut } from '../api/auth';
+import { clearSession, readSession, registerChurch, registerUser, saveSession, signIn, signOut } from '../api/auth';
 import { AuthContext } from './AuthContext';
 
 export default function AuthProvider({ children }) {
@@ -28,6 +28,7 @@ export default function AuthProvider({ children }) {
       canUseUserFeatures: isSignedIn && (!role || role === 'USER'),
       signIn: (credentials) => establishSession(signIn, credentials),
       registerUser: (details) => establishSession(registerUser, details),
+      registerChurch: (details) => establishSession(registerChurch, details),
       signOut: async () => {
         try {
           await signOut(readSession()?.refreshToken);

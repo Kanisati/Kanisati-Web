@@ -59,6 +59,8 @@ Public GET requests still use the shared client's in-flight deduplication. Prote
 
 ## Checks
 
+Church registration uses its own form under `src/auth/`, reachable from Sign in → Register a church. It submits the required name, phone, address, email, and password to `/auth/register/church`, establishes the returned session, and explains pending approval. Owner management screens are separate future steps.
+
 Church details load paginated upcoming events through `ChurchEventsProvider` and `/events/churches/:churchId`, replacing the embedded event list. View event closes church details and opens the existing event modal, where registration is available.
 
 Church details load recurring Mass schedules through `ChurchSchedulesProvider` and `/mass-schedules/churches/:churchId`. The section includes pagination, retry, empty states, and the church timezone. It replaces the embedded schedule list; dated occurrences remain in the Home Mass search.
