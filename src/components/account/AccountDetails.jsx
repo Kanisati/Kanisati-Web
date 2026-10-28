@@ -2,6 +2,7 @@ import { Avatar, Badge, Group, SimpleGrid, Stack, Tabs, Text } from '@mantine/co
 import styles from './styles.module.scss';
 import PasswordForm from './PasswordForm';
 import LocationForm from './LocationForm';
+import SavedChurchesPanel from './SavedChurchesPanel';
 import DeactivateAccount from './DeactivateAccount';
 import SessionControls from './SessionControls';
 import NotificationsPanel from './NotificationsPanel';
@@ -62,6 +63,7 @@ export default function AccountDetails() {
               <Tabs.Tab value="security">Security</Tabs.Tab>
               <Tabs.Tab value="notifications">Notifications</Tabs.Tab>
               {canUseUserFeatures && <Tabs.Tab value="registrations">My registrations</Tabs.Tab>}
+              {canUseUserFeatures && <Tabs.Tab value="favorites">Saved churches</Tabs.Tab>}
             </Tabs.List>
             <Tabs.Panel value="profile" pt="lg">
               <ProfileForm profile={account.data} saveProfile={account.saveProfile} />
@@ -81,6 +83,9 @@ export default function AccountDetails() {
             </Tabs.Panel>
             {canUseUserFeatures && <Tabs.Panel value="registrations" pt="lg" keepMounted={false}>
               <RegistrationsProvider><RegistrationsPanel /></RegistrationsProvider>
+            </Tabs.Panel>}
+            {canUseUserFeatures && <Tabs.Panel value="favorites" pt="lg" keepMounted={false}>
+              <SavedChurchesPanel />
             </Tabs.Panel>}
           </Tabs>
         </>

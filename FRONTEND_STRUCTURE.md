@@ -59,6 +59,10 @@ Public GET requests still use the shared client's in-flight deduplication. Prote
 
 ## Checks
 
+Church details load recurring Mass schedules through `ChurchSchedulesProvider` and `/mass-schedules/churches/:churchId`. The section includes pagination, retry, empty states, and the church timezone. It replaces the embedded schedule list; dated occurrences remain in the Home Mass search.
+
+Saved churches is a user-only account tab with paginated favorites and removal. Favorite mutations notify the Home favorites provider to reload saved IDs. The profile photo feature was removed at the user's request.
+
 The My registrations tab is available to user accounts. It mounts `RegistrationsProvider` on demand and loads `/events/registrations/mine`, with upcoming/all filters, pagination, and refresh. Event dates use the church timezone when provided. Signed-in users can register from event details using POST /events/:eventId/registrations. Successful registration refreshes events and capacity; API conflicts are displayed without assuming every conflict means a duplicate. My registrations supports cancellation before the event starts through DELETE /events/:eventId/registrations. An inline confirmation precedes the request, errors remain visible, and success refreshes the registration list from page one.
 
 The Notifications tab mounts `NotificationsProvider` on demand. It loads `GET /accounts/me/notifications` with pagination, displays `meta.unreadCount`, and supports refresh/retry. Viewing notifications does not mark them read. Explicit actions mark one/all as read or delete a notification after confirmation. Mutations show feedback and refresh the list from page one with the latest unread count.

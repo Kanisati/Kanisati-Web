@@ -29,12 +29,6 @@ export default function ChurchProfile({ church }) {
           <Stack gap={2}>{church.openingHours.map((hours) => <Text size="sm" key={hours.id || hours.dayOfWeek}>{hours.dayOfWeek}: {hours.isClosed ? 'Closed' : `${hours.opensAt}–${hours.closesAt}`}</Text>)}</Stack>
         </section>
       )}
-      {items(church.massSchedules).length > 0 && (
-        <section>
-          <Text fw={600} mb={4}>Mass schedule</Text>
-          <Stack gap={2}>{church.massSchedules.map((schedule) => <Text size="sm" key={schedule.id}>{[schedule.dayOfWeek, schedule.startTime, schedule.serviceType, schedule.language].filter(Boolean).join(' · ')}</Text>)}</Stack>
-        </section>
-      )}
       {items(church.events).length > 0 && (
         <section>
           <Text fw={600} mb={4}>Upcoming events</Text>

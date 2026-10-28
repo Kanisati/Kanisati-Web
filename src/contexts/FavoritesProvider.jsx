@@ -1,4 +1,4 @@
-import { useMemo, useReducer, useRef } from 'react';
+import { useEffect, useMemo, useReducer, useRef } from 'react';
 import { listFavoriteIds, setFavorite } from '../api/favorites';
 import { useApiResource } from '../hooks/useApiResource';
 import { useAuth } from './AuthContext';
@@ -12,6 +12,11 @@ function mutationReducer(state, action) {
 export default function FavoritesProvider({ children }) {
   const { accountKey, canUseUserFeatures } = useAuth();
   const resource = useApiResource(listFavoriteIds, accountKey, canUseUserFeatures);
+  const refresh = resource.refresh;
+  useEffect(() => {
+    window.addEventListener('kanisati:favorites-change', refresh);
+    return () => window.removeEventListener('kanisati:favorites-change', refresh);
+  }, [refresh]);
   const ids = useMemo(() => new Set(resource.data ?? []), [resource.data]);
   const [mutation, setMutation] = useReducer(mutationReducer, {});
   const pending = useRef(new Set());
