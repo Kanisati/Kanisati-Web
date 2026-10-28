@@ -1,6 +1,7 @@
 import { Avatar, Badge, Group, SimpleGrid, Stack, Tabs, Text } from '@mantine/core';
 import styles from './styles.module.scss';
 import PasswordForm from './PasswordForm';
+import LocationForm from './LocationForm';
 import DeactivateAccount from './DeactivateAccount';
 import SessionControls from './SessionControls';
 import NotificationsPanel from './NotificationsPanel';
@@ -57,12 +58,16 @@ export default function AccountDetails() {
           <Tabs defaultValue="profile">
             <Tabs.List grow aria-label="Account settings">
               <Tabs.Tab value="profile">Profile</Tabs.Tab>
+              <Tabs.Tab value="location">Saved location</Tabs.Tab>
               <Tabs.Tab value="security">Security</Tabs.Tab>
               <Tabs.Tab value="notifications">Notifications</Tabs.Tab>
               {canUseUserFeatures && <Tabs.Tab value="registrations">My registrations</Tabs.Tab>}
             </Tabs.List>
             <Tabs.Panel value="profile" pt="lg">
               <ProfileForm profile={account.data} saveProfile={account.saveProfile} />
+            </Tabs.Panel>
+            <Tabs.Panel value="location" pt="lg">
+              <LocationForm />
             </Tabs.Panel>
             <Tabs.Panel value="security" pt="lg">
               <Stack gap="xl">
