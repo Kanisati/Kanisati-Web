@@ -1,9 +1,10 @@
-import { getAccountProfile, updateAccountProfile } from '../api/accounts';
+import { changeAccountPassword, deactivateAccount, getAccountProfile, updateAccountProfile } from '../api/accounts';
+import { clearSession, signOutAllDevices } from '../api/auth';
 import { useApiResource } from '../hooks/useApiResource';
 import { useAuth } from './AuthContext';
 import { AccountContext } from './AccountContext';
 
-export default function AccountProvider({ children }) {
+export default function AccountProvider({ children, onDeactivated, onSignedOutAll }) {
   const { accountKey, isSignedIn } = useAuth();
   const profile = useApiResource(getAccountProfile, accountKey, isSignedIn);
   const saveProfile = async (values) => {
@@ -17,5 +18,15 @@ export default function AccountProvider({ children }) {
     profile.updateData((current) => ({ ...current, ...changes }));
     return 'Your profile was updated.';
   };
-  return <AccountContext.Provider value={{ ...profile, saveProfile }}>{children}</AccountContext.Provider>;
+  const deactivate = async () => {
+    await deactivateAccount();
+    clearSession();
+    onDeactivated?.();
+  };
+  const signOutEverywhere = async () => {
+    await signOutAllDevices();
+    clearSession();
+    onSignedOutAll?.();
+  };
+  return <AccountContext.Provider value={{ ...profile, saveProfile, changePassword: changeAccountPassword, deactivate, signOutEverywhere }}>{children}</AccountContext.Provider>;
 }

@@ -1,0 +1,26 @@
+.summary {
+  padding: 16px;
+  border: 1px solid var(--mantine-color-default-border);
+  background: var(--mantine-color-default-hover);
+  border-radius: var(--mantine-radius-md);
+}
+
+.identity {
+  min-width: 0;
+}
+
+.name {
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--mantine-color-default-border);
+
+  @media (max-width: 480px) {
+    > button {
+      width: 100%;
+    }
+  }
+}

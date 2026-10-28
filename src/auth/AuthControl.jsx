@@ -9,6 +9,7 @@ import AccountDetails from '../components/account/AccountDetails';
 export default function AuthControl() {
   const auth = useAuth();
   const [accountOpened, setAccountOpened] = useState(false);
+  const [accountMessage, setAccountMessage] = useState('');
   const [dialog, setDialog] = useState({ opened: false, mode: 'login' });
   const [logout, setLogout] = useReducer((state, action) => ({ ...state, ...action }), { busy: false, error: null });
   const close = () => setDialog((current) => ({ ...current, opened: false }));
@@ -33,11 +34,18 @@ export default function AuthControl() {
           <Button variant="default" onClick={() => setAccountOpened(true)}>My account</Button>
           <Button variant="default" onClick={handleSignOut} loading={logout.busy}>Sign out</Button>
         </Group>
-      ) : <Button variant="default" onClick={() => setDialog({ opened: true, mode: 'login' })}>Sign in</Button>}
+      ) : <Button variant="default" onClick={() => { setAccountMessage(''); setDialog({ opened: true, mode: 'login' }); }}>Sign in</Button>}
+      <Feedback message={accountMessage} tone="success" />
       <Feedback message={logout.error} tone="warning" />
       {auth.isSignedIn && (
-        <Dialog opened={accountOpened} onClose={() => setAccountOpened(false)} title="My account">
-          {accountOpened && <AccountProvider key={auth.accountKey}><AccountDetails /></AccountProvider>}
+        <Dialog opened={accountOpened} onClose={() => setAccountOpened(false)} title="My account" size="lg" padding="lg" radius="md">
+          {accountOpened && <AccountProvider key={auth.accountKey} onDeactivated={() => {
+            setAccountOpened(false);
+            setAccountMessage('Your account has been deactivated. You are now signed out.');
+          }} onSignedOutAll={() => {
+            setAccountOpened(false);
+            setAccountMessage('You are signed out here. Other devices will require sign-in when their current session expires.');
+          }}><AccountDetails /></AccountProvider>}
         </Dialog>
       )}
       <Dialog opened={dialog.opened} onClose={close} title={dialog.mode === 'login' ? 'Sign in' : 'Create a user account'}>

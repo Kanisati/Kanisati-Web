@@ -21,7 +21,7 @@ The Home page composes the existing features. API requests, shared feature state
 ## Context ownership
 
 - `AuthProvider` wraps the app. `useAuth()` exposes the session, account identity, user permissions, and authentication actions.
-- `AccountProvider` is scoped to the My account dialog. `useAccount()` loads the current profile and saves changed first/last names through `/accounts/me`. Account UI lives in `src/components/account/`.
+- `AccountProvider` is scoped to the My account dialog. `useAccount()` loads the current profile, saves changed first/last names through `/accounts/me`, and changes passwords through `/accounts/me/password`. Account UI lives in `src/components/account/`. Password drafts stay local to `PasswordForm` and are cleared after a successful change; confirmation is never sent to the API.
 - `HomeProviders` scopes discovery, Mass schedules, events, and favorites to the Home page.
 - `useDiscovery()` exposes the search, location, map view, selected church, and church details.
 - `useMassSchedule()` exposes paginated occurrences for the current location and fixed seven-day window.
@@ -58,5 +58,13 @@ Inputs accept the API's field-error arrays. Buttons default to `type="button"`; 
 Public GET requests still use the shared client's in-flight deduplication. Protected actions still use `authenticatedApiRequest` for token refresh and a single retry. Components should call their feature actions rather than construct endpoint URLs.
 
 ## Checks
+
+The My registrations tab is available to user accounts. It mounts `RegistrationsProvider` on demand and loads `/events/registrations/mine`, with upcoming/all filters, pagination, and refresh. Event dates use the church timezone when provided. Signed-in users can register from event details using POST /events/:eventId/registrations. Successful registration refreshes events and capacity; API conflicts are displayed without assuming every conflict means a duplicate. Cancellation is reserved for a later step.
+
+The Notifications tab mounts `NotificationsProvider` on demand. It loads `GET /accounts/me/notifications` with pagination, displays `meta.unreadCount`, and supports refresh/retry. Viewing notifications does not mark them read. Explicit actions mark one/all as read or delete a notification after confirmation. Mutations show feedback and refresh the list from page one with the latest unread count.
+
+The Security tab also offers confirmed sign-out across devices via `POST /auth/logout-all`. Local credentials are cleared after success; other devices cannot refresh their sessions. Existing access tokens may remain valid until expiry.
+
+Account deactivation lives in the Security tab and requires explicit confirmation. `AccountProvider` calls `DELETE /accounts/me`, clears the local session only after success, and closes the dialog with a signed-out confirmation. Failed requests show feedback in the confirmation panel.
 
 Run `npm run lint` and `npm run build` after structural changes. For a browser smoke check, exercise search and location, open church/event dialogs, sign in, save a church, submit a review, and load another page when results are available.

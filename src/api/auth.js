@@ -46,6 +46,10 @@ export async function signOut(refreshToken) {
   });
 }
 
+export async function signOutAllDevices() {
+  await authenticatedApiRequest('/auth/logout-all', { method: 'POST' });
+}
+
 async function refreshSession() {
   if (!refreshPromise) {
     refreshPromise = (async () => {
